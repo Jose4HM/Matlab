@@ -70,11 +70,13 @@ subplot(2,3,6)
 stem(n,y6)
 %%
 op=1;
+a1 = input ('Limite inferior : ') ;
+a2 = input ('Limite superior : ') ;
 while op==1
     clc
     fprintf('Selecciones una de las opciones\n 1)y1=x1+x2;\n 2)y2=x1-x2;\n 3)y3=x1.*x2;\n 4)y4=x1./x2\n 5)y5=2*x1;\n 6)y6=x1.^x2;\n')
     o=input('Opcion:');
-    n=0:30;
+    n=a1:a2;
     x1=sin(pi*n./4);
     x2=cos(pi*n./7);
     y1=x1+x2;
