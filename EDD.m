@@ -88,3 +88,21 @@ x=[1,ones(1,10)];
 y=filter(b,a,x);
 n=0:10;
 stem(n,y)
+
+%% IV.6.2
+n=-2:30;
+y=[1 0 zeros(1,31)];
+for i=3:33
+   y(i)=((-1)^(i-3))-4*y(i-1)+8*y(i-2);
+end
+figure(1)
+stem(n,y) 
+% Filter
+a=[1 4 -8];
+b=1;
+x=ones(1,30);
+y=filter(b,a,x,filtic(b,a,[1 0]));
+% disp(y)
+n=0:29;
+figure(2)
+stem(n,y)
