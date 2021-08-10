@@ -14,13 +14,13 @@ Ts=(0:85:Fs)./Fs;
 xn=cos(2*pi*fx*Ts);
 subplot(3,1,2);
 stem(Ts,xn);grid on
-xlim([0 0.03])
+xlim([0 0.05])
 title('Sampled Signal')
 xlabel('time[s]')
 ylabel('y[n]')
 subplot(3,1,3)
 plot(Ts,xn);grid on
-xlim([0 0.03])
+xlim([0 0.05])
 title('Reconstructed signal')
 xlabel('time(s)')
 ylabel('y(n)')
