@@ -1,9 +1,9 @@
 clear; clc
-ap=1;
-ar=15;
-wp=0.2*pi; 
-wr=0.3*pi;
-T=1;
+ap=1.5;
+ar=30;
+wp=1; 
+wr=1.35;
+T=1/10000;
 
 Wp=wp/T; Wr=wr/T;
 
