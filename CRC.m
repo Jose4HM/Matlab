@@ -29,7 +29,7 @@ while n<length(senttrama)-length(polinomio)-1
 end
 %% Receptor
 clc
-corruptedsignal=awgn(bits,1,'measured');%Se corrompe la señal
+corruptedsignal=awgn(bits,50,'measured');%Se corrompe la señal
 reconstructed=ones(1,length(bits));%Se pre-aloja la señal
 reconstructed(corruptedsignal<0.5)=0;%Se intenta recuperar la señal
 disp('Bits orignales')
