@@ -7,7 +7,7 @@ Powered by Jose Hancco
 National University of San Agustín
 Telecommunications engineering
 
-My book can be found in [Apuntes sobre Telecomunicaciones II](https://github.com/Yasperterian/TelecomunicationsBook/blob/master/mainv2.pdf).
+My book can be found in [Apuntes sobre Telecomunicaciones II](https://github.com/Yasperterian/TelecomunicationsBook/blob/master/mainv2.pdf) or [Apuntes sobre Telecomunicaciones II](https://github.com/Yasperterian/TelecomunicationsBook/blob/master/mainv2.pdf)..
 =======
 =======
 >>>>>>> 163db7f29dbc36cb0f820a26aa9274676cd0bee1
