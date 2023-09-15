@@ -1,6 +1,6 @@
+%This MATLAB code generates and visualizes three signals: a message signal...with sinusoidal waveform and exponential damping, a carrier signal in the form of a sawtooth wave, and a Pulse Width Modulation (PWM) signal that results from comparing the message and carrier signals.
 clc;
 clear;
-
 %% Parámetros
 t=0: 0.001: 6;%tiempo
 fc=50;%frecuencia de señal portadora

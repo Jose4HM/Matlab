@@ -1,3 +1,4 @@
+%This MATLAB code generates three signals: a randomly modulated message signal, a carrier signal as a sawtooth wave with double the message signal's maximum frequency, and a Pulse Width Modulation (PWM) signal by comparing the message and carrier signals. The signals are displayed in separate subplots for analysis and visualization.
 %% Modulating signal
 clc;clear
 t=0:0.0001:5;%Creating time vector

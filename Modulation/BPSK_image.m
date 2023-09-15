@@ -1,3 +1,4 @@
+%This MATLAB program modulates a grayscale image using BPSK, visualizes the resulting signal, and then attempts to recover and display the original image.
 clc;clear;
 I_in = imread('lena1.tif');
 % encoding image into array of bits

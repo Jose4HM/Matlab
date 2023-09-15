@@ -1,6 +1,7 @@
+%This MATLAB code performs 8-QAM modulation on random data, adds AWGN to the signal, and then visualizes the received signal points alongside a reference constellation for evaluation.
 clear; clc;
-m=6;
-q=2^m;
+m=2;
+q=2^m;%Number of quadratures
 data = randi([0 (q-1)],1000,1);%generate 0-7 random array
 txSig = qammod(data,q);%Modulate using 8qam
 rxSig = awgn(txSig,20,'measured');%Pass la modulate signal through an AWGN

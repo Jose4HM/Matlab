@@ -1,3 +1,4 @@
+%This MATLAB code generates three signals: a sine wave message signal, a sawtooth wave carrier signal, and a Pulse Width Modulation (PWM) signal based on a comparison between the message and carrier signals. The signals are displayed in separate subplots for analysis and visualization.
 clc;
 clear all;
 close all;

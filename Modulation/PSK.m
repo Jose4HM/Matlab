@@ -1,3 +1,4 @@
+%This code in MATLAB performs Binary Phase Shift Keying (BPSK) modulation on a given binary sequence 'b' by mapping '0' to '-1' and '1' to '1'. It then generates and plots the modulated signal by multiplying the binary signal with a sinusoidal carrier signal. The resulting signals are displayed in separate subplots for visualization and analysis.
 clear;
 clc;
 b =[1 1 0 0 1 0 1 0];% input ('Ingrese el flujo de bits \ n'); % b = [0 1 0 1 1 1 0];
