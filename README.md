@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # DigitalSignals
 Some programs about digital signal processing 
 You are free to use them, but if you'll use them for a official work, pls add a reference to my repository
@@ -21,7 +19,7 @@ This repository has been create for learn about Telecomunications and its applic
 
 ## Authors
 
-- [@yasperterian](https://github.com/Yasperterian/)
+- [@Jose4HM](https://github.com/Jose4HM/)
 
 
 ## 🚀 About Me
