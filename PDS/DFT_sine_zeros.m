@@ -1,17 +1,22 @@
 clc; clear;  % Clear the command window and workspace.
 
 % Define a signal function as the sum of two sinusoidal components.
-signal_func = @(t) sin(2 * pi * 1 * t) + sin(2 * pi * 4 * t);
+signal_func = @(t) exp(1i*2*pi*2.5/128*t); %0.01953
 
-sampling_frequency = 10;  % Set the sampling frequency to 10 Hz.
-Tduration = 10;  % Set the duration of the signal to 10 seconds.
+sampling_frequency = 4*2.5/128;  % Set the sampling frequency to xx Hz.
+Tduration = 128;  % Set the duration of the signal to xx seconds.
 
 % Call the 'sample_any_signal' function to sample the signal function.
-[sampled_signal, time] = sample_any_signal(signal_func, sampling_frequency, Tduration);
+[sampled_signal, ~] = sample_any_signal(signal_func, sampling_frequency, Tduration);
 
+sampled_signal=[sampled_signal zeros(1,length(sampled_signal)-1)];
+time_samples = 0:1/sampling_frequency:2*Tduration;
+
+plot_signal(sampled_signal,time_samples)
 % Perform the Discrete Fourier Transform (DFT) on the sampled signal.
 [k_vector, x_freqs] = myDFT(sampled_signal, sampling_frequency);
 
+subplot(2,1,2);
 % Create a stem plot of the magnitude of the DFT.
 stem(x_freqs, abs(k_vector));
 

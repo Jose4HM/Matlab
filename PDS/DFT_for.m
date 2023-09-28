@@ -1,4 +1,5 @@
-% myDFT, computes the Discrete Fourier Transform (DFT) of a given signal using a nested loop-based approach
+% myDFT, computes the Discrete Fourier Transform (DFT) of a given signal
+%using a nested loop-based approach
 function [X,freq_hz] = myDFT(x,fs)
     N = length(x);  % Samples of the DFT
     X = zeros(1, N);  % Initialize vector k-th dft sample
