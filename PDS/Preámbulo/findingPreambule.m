@@ -6,7 +6,7 @@ length_x = 50;% Signal length x (you can adjust it)
 length_y = 200; % Signal length y (you can adjust it)
 x = rand(1, length_x);  % Random signal of length x
 y = rand(1, length_y); % Random signal length y
-index = randi(length_y - length_x + 1) % Generate a random index to insert x into y
+index = randi(length_y - length_x + 1); % Generate a random index to insert x into y
 y(index:index + length_x - 1) = x; % Insert the preamble of x into y in a random place
 
 % Call function to find preamble

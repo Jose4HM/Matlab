@@ -12,7 +12,7 @@ function [X,freq_hz] = dft(x,fs)
         end
     end
     
-%     freq_hz = (-fs/2:freq_resolution:fs/2-freq_resolution);
-    freq_hz = (0:N-1) * freq_resolution;
-%     freq_hz = -fs/2:fs/(N-1):fs/2;
+    % freq_hz = (-fs/2:freq_resolution:fs/2-freq_resolution);
+    % freq_hz = (0:N-1) * freq_resolution;
+    freq_hz = -fs/2:fs/(N-1):fs/2;
 end

@@ -12,9 +12,9 @@ Tduration = 128;  % Set the duration of the signal to xx seconds.
 sampled_signal=[sampled_signal zeros(1,length(sampled_signal)-1)];
 time_samples = 0:1/sampling_frequency:2*Tduration;
 
-plot_signal(sampled_signal,time_samples)
+plot_signal(time_samples,sampled_signal,2,1,1,'b');
 % Perform the Discrete Fourier Transform (DFT) on the sampled signal.
-[k_vector, x_freqs] = myDFT(sampled_signal, sampling_frequency);
+[k_vector, x_freqs] = dft(sampled_signal, sampling_frequency);
 
 subplot(2,1,2);
 % Create a stem plot of the magnitude of the DFT.
