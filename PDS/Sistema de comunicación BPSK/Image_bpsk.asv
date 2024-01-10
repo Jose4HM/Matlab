@@ -1,13 +1,18 @@
 clc;
 clear;
 
-%- Creación de bits y preámbulo
-rng(0); % Para reproducibilidad
-% Generar preámbulo aleatorio (preamble) y señal (signal)
-length_preamble = 8; % Longitud del preámbulo [0 1 1 0 1 0 0 1]
-length_signal = 1e6; % Longitud de la señal
-preamble = [0 1 1 0 1 0 0 1]; % Preamble esperado
-signal = randi([0, 1], 1, length_signal); % Señal aleatoria de longitud y con valores de 0 y 1
+%% Create bits and preamble
+rng(0); % Reproducibility
+% Generating random preamble and signal (bits)
+length_preamble = 1e2; 
+preamble = randi([0, 1], 1, length_preamble); % Preamble esperado
+
+original_image = imread('lena.png');
+gray_image = rgb2gray(original_image);
+binary_sequence = reshape(dec2bin(gray_image, 8).' - '0', [], 1)';
+
+length_signal = length(binary_sequence); % Longitud de la señal
+
 index = randi(length_signal - length_preamble + 1); % Generar un índice aleatorio para insertar el preámbulo en la señal
 signal(index:index + length_preamble - 1) = preamble; % Insertar el preámbulo en la señal en un lugar aleatorio
 
@@ -33,7 +38,7 @@ txSignal = txFilter([modulated'; zeros(nSpan,1)]);
                             
 % Configuración del dispositivo bladeRF
 % (Asegúrate de tener el dispositivo correctamente conectado y que el código pueda acceder a él)
-dev = bladeRF('*:serial=0304368977fd40ceb47b263fd29e61d7');
+dev = bladeRF('*:serial=030');
 
 % Configuración del transmisor
 dev.tx.frequency = 900e6;

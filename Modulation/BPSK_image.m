@@ -3,10 +3,10 @@ clc;clear;
 I_in = imread('lena1.tif');
 % encoding image into array of bits
 B = dec2bin(I_in,1);
-C = reshape(B',1,numel(B)); % converted into bits
+C = reshape(B',1,numel(B)); % Converted into bits
 b=zeros(1,length(C));
-n = length(b);
-for l=1:n
+%char to int (get train bits)
+for l=1:length(C)
    bhat=C(l);
    if bhat==49
        b(l)=1;
@@ -14,15 +14,11 @@ for l=1:n
        b(l)=0;
    end
 end
-bpsk=zeros(1,length(C));
-for j=1:n
-    if b(j)==1
-       bpsk(j)=1;
-       
-   else
-       bpsk(j)=-1;
-   end
-end
+
+%Modulate in bpsk
+bpsk = 2*b - 1;
+
+%Create time vector
 t = 0: 0.01: 1;
 sint = sin (2 * pi * t);%funcion seno
 bitsreceived=zeros(1,length(C));
@@ -34,7 +30,7 @@ for i = 1: 10
     grid on
     hold on
 end
-for i = 1: n
+for i = 1: length(C)
     graph=bpsk(i)*sint;
     if graph==-1*sint
         bitsreceived(i)=0;
@@ -47,7 +43,7 @@ charbpsk=strrep(charbpsk,'[','');
 charbpsk=strrep(charbpsk,']','');
 charbpsk=strrep(charbpsk,' ','');
 scatterplot(bpsk,2)
-% decoding image from bits
+% Decoding image from bits
 D = reshape(charbpsk,size(B,2),size(B,1));
 I_out = reshape(bin2dec(D'),size(I_in));
 figure(3)
