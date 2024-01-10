@@ -12,7 +12,6 @@ Rx.rx.gain = 40;
 Rx.rx.config.num_buffers = 64;
 Rx.rx.config.buffer_size = 16384;
 Rx.rx.config.num_transfers = 16;
-
 fprintf('Running with the following settings:\n');
 disp(Rx.rx)
 disp(Rx.rx.config)
@@ -21,10 +20,12 @@ Rx.rx.start();
 %Receive 0.250s of samples
 samples = Rx.receive(0.250 * Rx.rx.samplerate);
 %% De-filter
-nSpan = 10;
-sps = 4;
-rollOff = 0.5;
-rxFilter = comm.RaisedCosineReceiveFilter("FilterSpanInSymbols",nSpan,"InputSamplesPerSymbol",sps,"RolloffFactor",rollOff);
+nSpan = 1;
+sps = 10;
+decimationFactor = 10;
+rxFilter = comm.RaisedCosineReceiveFilter("FilterSpanInSymbols",nSpan,...
+    "InputSamplesPerSymbol",sps,...
+    "DecimationFactor",decimationFactor);
 rxFilteredSignal = rxFilter(samples);
 
 rxFilteredSignal = rxFilteredSignal(nSpan+1:end);
@@ -56,7 +57,7 @@ numBytes = floor(numBits / 8) * 8;
 receivedImageBits = receivedImageBits(1:numBytes);
 receivedImageBytes = reshape(receivedImageBits,8, []).';
 receivedGrayImage = bi2de(receivedImageBytes);
-receivedImage = reshape(receivedImage, size(receivedImageBytes));
+receivedImage = reshape(receivedGrayImage, size(receivedImageBytes));
 
 %% Show image
 imshow(receivedImage);

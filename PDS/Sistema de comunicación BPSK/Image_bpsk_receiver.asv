@@ -12,7 +12,6 @@ Rx.rx.gain = 40;
 Rx.rx.config.num_buffers = 64;
 Rx.rx.config.buffer_size = 16384;
 Rx.rx.config.num_transfers = 16;
-
 fprintf('Running with the following settings:\n');
 disp(Rx.rx)
 disp(Rx.rx.config)
@@ -20,11 +19,14 @@ disp(Rx.rx.config)
 Rx.rx.start();
 %Receive 0.250s of samples
 samples = Rx.receive(0.250 * Rx.rx.samplerate);
-
-nSpan = 10;
-sps = 4;
+%% De-filter
+nSpan = 1;
+sps = 10;
 rollOff = 0.5;
-rxFilter = comm.RaisedCosineReFilter("FilterSpanInSymbols",nSpan,"OutputSamplesPerSymbol",sps,"RolloffFactor",rollOff);
+decimationFactor = 2;
+rxFilter = comm.RaisedCosineReceiveFilter("FilterSpanInSymbols",nSpan,...
+    "InputSamplesPerSymbol",sps,"RolloffFactor",rollOff.. ...
+    "DecimationFactor",decimationFactor);
 rxFilteredSignal = rxFilter(samples);
 
 rxFilteredSignal = rxFilteredSignal(nSpan+1:end);
