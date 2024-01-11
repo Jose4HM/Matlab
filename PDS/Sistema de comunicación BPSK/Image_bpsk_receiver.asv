@@ -1,6 +1,5 @@
 clc
 clear
-
 %% BladeRF
 Rx = bladeRF('*:serial=030');
 
@@ -22,10 +21,9 @@ samples = Rx.receive(0.250 * Rx.rx.samplerate);
 %% De-filter
 nSpan = 1;
 sps = 10;
-rollOff = 0.5;
-decimationFactor = 2;
+decimationFactor = 10;
 rxFilter = comm.RaisedCosineReceiveFilter("FilterSpanInSymbols",nSpan,...
-    "InputSamplesPerSymbol",sps,"RolloffFactor",rollOff.. ...
+    "InputSamplesPerSymbol",sps,...
     "DecimationFactor",decimationFactor);
 rxFilteredSignal = rxFilter(samples);
 
@@ -47,21 +45,21 @@ preamble = randi([0, 1], 1, length_preamble);
 
 correlation = xcorr(demodulated, preamble);
 [~, idx] = max(correlation);
-startIdx = idx - length(demodulated) + 1;
+startIdx = idx - length(demodulated) + 1;   
 
 dataAfterPreamble = demodulated(startIdx + length_preamble:end);
+dataAfterPreamble = reshape(dataAfterPreamble, 1,[]);
 %% Reconstruct the image
-receivedImageBits = dataAfterPreamble;
+imagencolor = imread('lena.png');
+orig_class = class(imagencolor);
+orig_size = size(imagencolor);
 
-numBits = numel(receivedImageBits);
-numBytes = floor(numBits / 8) * 8;
-receivedImageBits = receivedImageBits(1:numBytes);
-receivedImageBytes = reshape(receivedImageBits,8, []).';
-receivedGrayImage = bi2de(receivedImageBytes);
-receivedImage = reshape(receivedImage, size(receivedImageBytes));
+reconstructed = reshape(typecast(uint8(bin2dec(char(reshape(dataAfterPreamble, 8, []) ...
+    +'0').')), orig_class), orig_size);
 
-%% Show image
-imshow(receivedImage);
-title('Received image');
+figure;
+imshow(reconstructed);
+title('reconstructed')
+
 
  

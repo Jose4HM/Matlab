@@ -1,6 +1,5 @@
 clc
 clear
-
 %% BladeRF
 Rx = bladeRF('*:serial=030');
 
@@ -40,27 +39,27 @@ ylabel('Imaginary');
 grid on;
 
 %% Find preamble
-rng(0);
+rng('default');
 length_preamble = 1e2;
 preamble = randi([0, 1], 1, length_preamble);
 
 correlation = xcorr(demodulated, preamble);
 [~, idx] = max(correlation);
-startIdx = idx - length(demodulated) + 1;
+startIdx = idx - length(demodulated) + 1;   
 
 dataAfterPreamble = demodulated(startIdx + length_preamble:end);
+dataAfterPreamble = reshape(dataAfterPreamble, 1,[]);
 %% Reconstruct the image
-receivedImageBits = dataAfterPreamble;
+imagencolor = imread('lena.png');
+orig_class = class(imagencolor);
+orig_size = size(imagencolor);
 
-numBits = numel(receivedImageBits);
-numBytes = floor(numBits / 8) * 8;
-receivedImageBits = receivedImageBits(1:numBytes);
-receivedImageBytes = reshape(receivedImageBits,8, []).';
-receivedGrayImage = bi2de(receivedImageBytes);
-receivedImage = reshape(receivedGrayImage, size(receivedImageBytes));
+reconstructed = reshape(typecast(uint8(bin2dec(char(reshape(dataAfterPreamble, 8, []) ...
+    +'0').')), orig_class), orig_size);
 
-%% Show image
-imshow(receivedImage);
-title('Received image');
+figure(2)
+imshow(reconstructed);
+title('reconstructed')
+
 
  

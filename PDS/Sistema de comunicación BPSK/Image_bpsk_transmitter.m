@@ -1,20 +1,23 @@
 clc;
 clear;
-
 %% Create bits and preamble
-rng(0); % Reproducibility
+rng('default'); % Reproducibility
 % Generating random preamble and signal (bits)
 length_preamble = 1e2;
 preamble = randi([0, 1], 1, length_preamble);
 
 original_image = imread('lena.png');
-gray_image = rgb2gray(original_image);
-binary_sequence = reshape(dec2bin(gray_image, 8).' - '0', [], 1)';% Turning matrix into vector
+figure(2)
+imshow(original_image); title('original');
+binary_sequence = reshape((dec2bin(typecast(original_image(:), 'uint8'), 8) - '0').', 1, []);
+
+% binary_sequence = [preamble binary_sequence];
 
 length_signal = length(binary_sequence);
 
 index = randi(length_signal - length_preamble + 1);
-binary_sequence(index:index + length_preamble - 1) = preamble;
+
+binary_sequence = [randi([0, 1], 1, 2*length_preamble), preamble, binary_sequence];
 %% BPSK modulation
 modulated = pskmod(binary_sequence, 2, pi);
 scatterplot(modulated);
