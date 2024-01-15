@@ -1,65 +1,77 @@
+close all
 clc
 clear
-%% BladeRF
-Rx = bladeRF('*:serial=030');
-
-Rx.rx.frequency = 900e6;
-Rx.rx.samplerate = 4e6;
-Rx.rx.bandwidth = 2e6;
-Rx.rx.gain = 40;
-
-Rx.rx.config.num_buffers = 64;
-Rx.rx.config.buffer_size = 16384;
-Rx.rx.config.num_transfers = 16;
-fprintf('Running with the following settings:\n');
-disp(Rx.rx)
-disp(Rx.rx.config)
-%% Start reception
-Rx.rx.start();
-%Receive 0.250s of samples
-samples = Rx.receive(0.250 * Rx.rx.samplerate);
-%% De-filter
+%% Load samples
+samples = load_sc16q11('D:\Archivos de programas\bladeRF\bpsk.sc16q11');
+%% Coarse frecuencia
 nSpan = 1;
-sps = 10;
-decimationFactor = 10;
-rxFilter = comm.RaisedCosineReceiveFilter("FilterSpanInSymbols",nSpan,...
+sps = 4;
+decimationFactor = 2;
+%% Coarse frecuencia
+Fs = 4e6;
+
+coarseSync = comm.CoarseFrequencyCompensator( ...
+    Modulation="BPSK", ...
+    SampleRate=Fs, ...
+    SamplesPerSymbol=sps,...
+    FrequencyResolution=1);
+
+[compensatedData,aux1] = coarseSync(samples);
+%% Raised cosine filter
+rxFilter = comm.RaisedCosineReceiveFilter(...
+    "FilterSpanInSymbols",10,...
     "InputSamplesPerSymbol",sps,...
-    "DecimationFactor",decimationFactor);
-rxFilteredSignal = rxFilter(samples);
+    "DecimationFactor",2,...
+    "RolloffFactor",0.5);
 
-rxFilteredSignal = rxFilteredSignal(nSpan+1:end);
+rxFilteredSignal = rxFilter(compensatedData);
+%% Symbol
+symbolSync = comm.SymbolSynchronizer(...
+    'SamplesPerSymbol',2, ...
+    'NormalizedLoopBandwidth',0.1, ...
+    'DampingFactor',40, ...
+    'TimingErrorDetector','Mueller-Muller (decision-directed)');
 
+rxSync = symbolSync(rxFilteredSignal);
+scatterplot(rxSync)
+%% Carrier Synchronize
+fineSync = comm.CarrierSynchronizer( ...
+    'DampingFactor',0.7, ...
+    'NormalizedLoopBandwidth',0.005, ...
+    'SamplesPerSymbol',1, ...
+    'Modulation','BPSK');
+
+rxCarrierSync = fineSync(rxSync);
+scatterplot(rxCarrierSync)
 %% BPSK Demodulation
-demodulated = pskdemod(rxFilteredSignal, 2, pi);
+% rxFilteredSignal=totalData;
+%reales = real(rxCarrierSync);
 
-scatterplot(rxFilteredSignal);
-title('Constelation: Signal received');
-xlabel('Real');
-ylabel('Imaginary');
-grid on;
-
+demodulated = pskdemod(-1*rxCarrierSync, 2);
 %% Find preamble
-rng('default');
-length_preamble = 1e2;
-preamble = randi([0, 1], 1, length_preamble);
+%barker=comm.BarkerCode('Length',11,'SamplesPerFrame',11);
+%auxpre2 = barker();
+auxpre = [1 0 1 0 1 1 1 0 1 1 1 0 0]';
+preamble = [auxpre;auxpre;auxpre;auxpre];
+preambleMod = pskmod(preamble, 2);
+prbdet = comm.PreambleDetector(preambleMod);
 
-correlation = xcorr(demodulated, preamble);
-[~, idx] = max(correlation);
-startIdx = idx - length(demodulated) + 1;   
+[startIdx2,detmet] = prbdet(rxCarrierSync);
+detmetSort = sort(detmet,'descend');
 
-dataAfterPreamble = demodulated(startIdx + length_preamble:end);
-dataAfterPreamble = reshape(dataAfterPreamble, 1,[]);
-%% Reconstruct the image
-imagencolor = imread('lena.png');
-orig_class = class(imagencolor);
+prbdet.Threshold = max(detmetSort); 
+
+startIdx = prbdet(rxCarrierSync);
+%[startIdx] = prbdet(pskmod(demodulated,2));
+
+imagencolor = imread('nike1.jpg');
 orig_size = size(imagencolor);
+% orig_size = [225 225 3];
 
-reconstructed = reshape(typecast(uint8(bin2dec(char(reshape(dataAfterPreamble, 8, []) ...
-    +'0').')), orig_class), orig_size);
-
-figure(2)
+dataAfterPreamble = demodulated(startIdx+1:startIdx+orig_size(1)*orig_size(2)*orig_size(3)*8);
+%% Reconstruct the image
+reconstructed = reshape(typecast(uint8(bin2dec(char(reshape( ...
+    dataAfterPreamble, 8, [])+'0').')), 'uint8'), orig_size);
 imshow(reconstructed);
+
 title('reconstructed')
-
-
- 
