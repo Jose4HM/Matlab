@@ -9,7 +9,6 @@ sps = 4;
 decimationFactor = 2;
 %% Coarse frecuencia
 Fs = 4e6;
-
 coarseSync = comm.CoarseFrequencyCompensator( ...
     Modulation="BPSK", ...
     SampleRate=Fs, ...
@@ -47,7 +46,7 @@ scatterplot(rxCarrierSync)
 % rxFilteredSignal=totalData;
 %reales = real(rxCarrierSync);
 
-demodulated = pskdemod(-1*rxCarrierSync, 2);
+demodulated = pskdemod(rxCarrierSync, 2);
 %% Find preamble
 %barker=comm.BarkerCode('Length',11,'SamplesPerFrame',11);
 %auxpre2 = barker();
@@ -64,7 +63,7 @@ prbdet.Threshold = max(detmetSort);
 startIdx = prbdet(rxCarrierSync);
 %[startIdx] = prbdet(pskmod(demodulated,2));
 
-imagencolor = imread('nike1.jpg');
+imagencolor = imread('a.png');
 orig_size = size(imagencolor);
 % orig_size = [225 225 3];
 

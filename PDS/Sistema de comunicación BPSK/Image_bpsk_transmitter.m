@@ -49,9 +49,17 @@ Tx.tx.config.num_transfers = 16;
 fprintf('Running with the following settings:\n');
 disp(Tx.tx)
 disp(Tx.tx.config)
-%% Start transmition    
+%% Start transmition
+disp("Begin transmition in:")
+for c = 3:-1:1
+    fprintf("%d seconds \n",c)
+    pause(1)
+end
 Tx.tx.start();
+disp("Starting")
 delay_seconds = 0;
 Tx.transmit(txSignal, delay_seconds, 0, true, true);
-%% Stop
+disp("Stopping in 1.5s")
+pause(1.5)
 Tx.tx.stop();
+disp("Stopped")
